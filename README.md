@@ -14,8 +14,10 @@ ao clicar em novo registro e fazer post, ele tem 2 validadores de campo, email e
 
 em cada metodo, como post, delete, update, é exibido uma mensagem dependendo do status recebido, como sucesso, falha, etc</br>
 
-<p align="center" width="700">
- <img src="1.png" width="200" />
-<img src="2.png" width="200" />
+foi utilizado a extensão live-server no projeto para lidar com cors
+
+<p align="center" >
+ <img src="1.png" width="600" />
+<img src="2.png" width="600" />
 
 </p>
