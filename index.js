@@ -1,5 +1,5 @@
-import { createElementHTML, createTableData } from './compomnents.js';
-import { handleEdit, handleDelete, onSubmit, handlePost } from './handles.js';
+import { createTableData } from './compomnents.js';
+import { handlePost } from './handles.js';
 import { token } from './util.js';
 
 function getApi() {
@@ -18,9 +18,19 @@ function getApi() {
 }
 
 document.querySelector('.post').addEventListener('click', function () {
-  document.querySelector('table').classList.add('hide-table');
+  document.querySelector('table').classList.add('hide');
+  document.querySelector('form').classList.remove('hide');
+  document.querySelector('.post').classList.add('hide');
 });
 
 document.querySelector('form').addEventListener('submit', handlePost);
+
+document
+  .querySelector('form button[type=button]')
+  .addEventListener('click', function () {
+    document.querySelector('table').classList.remove('hide');
+    document.querySelector('form').classList.add('hide');
+    document.querySelector('.post').classList.remove('hide');
+  });
 
 window.onload = getApi;

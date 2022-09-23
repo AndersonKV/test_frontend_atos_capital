@@ -28,14 +28,18 @@ export function handlePost(event) {
     body: JSON.stringify(data),
   })
     .then(res => {
-      console.log(res.headers.values());
+      if (res.status === 201) {
+        alert('post criado com sucesso');
+      }
+
+      if (res.status === 422) {
+        alert('esse email já esta em uso');
+      }
 
       return res.json();
     })
     .then(data => {
-      if (data.id) {
-        alert('post criado com sucesso');
-      }
+      console.log(data);
     })
     .catch(err => {
       console.log(err);
