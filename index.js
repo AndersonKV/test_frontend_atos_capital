@@ -1,27 +1,25 @@
-import { createElementHTML, handleEdit } from './compomnents.js';
+import { createElementHTML } from './compomnents.js';
+import { handleEdit, handleDelete } from './handles.js';
+import { token } from './util.js';
 
 function getApi() {
-  const url = 'https://gorest.co.in/public/v2/users';
+  const url = 'https://gorest.co.in/public/v2/users?access-token' + token;
   const table = document.querySelector('tbody');
-  const dataLocal = JSON.parse(localStorage.getItem('data'));
 
-  dataLocal.map(user => {
-    table.appendChild(createHTMLelement(user));
-  });
-  // fetch(url, { method: 'GET' })
-  //   .then(res => res.json())
-  //   .then(data => {
-  //     // data.map(user => {
-  //     //   table.appendChild(createHTMLelement(user));
-  //     // });
-  //   });
+  fetch(url, { method: 'GET' })
+    .then(res => res.json())
+    .then(data => {
+      data.map(user => {
+        table.appendChild(createTableData(user));
+      });
+    });
 }
 
-function createHTMLelement(data) {
+function createTableData(data) {
   const tr = createElementHTML('tr');
   tr.id = data.id;
 
-  const tdId = createElementHTML('td', 'id', data.id);
+  const tdId = createElementHTML('td', null, data.id);
 
   const tdName = createElementHTML('td', 'name', data.name);
 
@@ -30,18 +28,14 @@ function createHTMLelement(data) {
   const tdStatus = createElementHTML('td', 'status');
 
   const editButton = createElementHTML('button', null, 'Editar');
-  // const deleteButton = createElementHTML('button');
-
-  //editButton.innerText = 'Editar';
+  const deleteButton = createElementHTML('button', null, 'Excluir');
 
   editButton.addEventListener('click', handleEdit);
+  deleteButton.addEventListener('click', handleDelete);
 
-  tdStatus.append(editButton);
+  tdStatus.append(editButton, deleteButton);
 
-  tr.appendChild(tdId);
-  tr.appendChild(tdName);
-  tr.appendChild(tdEmail);
-  tr.appendChild(tdStatus);
+  tr.append(tdId, tdName, tdEmail, tdStatus);
 
   return tr;
 }
