@@ -4,32 +4,41 @@ import {
   checkIsValueUpdateChange,
   openingInput,
   closedInput,
+  formValidate,
 } from './util.js';
 
-export function handlePost(data) {
+export function handlePost(event) {
+  event.preventDefault();
+
+  const formData = new FormData(event.target);
+  const data = Object.fromEntries(formData);
+
   const url = 'https://gorest.co.in/public/v2/users';
+
+  if (formValidate(data)) {
+    return;
+  }
 
   fetch(url, {
     method: 'POST',
     headers: {
       Authorization: 'Bearer ' + token,
+      'Content-Type': 'application/json',
     },
-    body: data,
+    body: JSON.stringify(data),
   })
     .then(res => {
-      console.log(res);
-
-      if (res.status === 201) {
-        alert('post feito com sucesso');
-      }
+      console.log(res.headers.values());
 
       return res.json();
     })
     .then(data => {
-      console.log(data);
-      // alert(data.message)
+      if (data.id) {
+        alert('post criado com sucesso');
+      }
     })
     .catch(err => {
+      console.log(err);
       alert(err.message);
     });
 }

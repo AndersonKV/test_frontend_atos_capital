@@ -4,15 +4,25 @@
   box-sizing: border-box;
 }
 .container {
-  border: 1px solid black;
-  padding: 60px;
   display: flex;
+  flex-direction: column;
+  padding: 60px;
 }
 
+.post {
+  padding: 20px;
+  background-color: blue;
+  color: #dddddd;
+  cursor: pointer;
+}
+
+.hide-table {
+  display: none;
+}
 table {
   font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
+  border: 1px solid black;
+  padding: 60px;
 }
 
 td,
@@ -32,4 +42,24 @@ tr:nth-child(even) {
 
 input {
   width: 80%;
+}
+
+form {
+  width: 600px;
+  display: flex;
+  flex-direction: column;
+}
+
+form button {
+  padding: 20px;
+  background-color: dodgerblue;
+  color: #dddddd;
+  cursor: pointer;
+}
+
+form,
+input,
+select {
+  width: 100%;
+  padding: 10px;
 }

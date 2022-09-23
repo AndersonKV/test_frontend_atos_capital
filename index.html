@@ -10,6 +10,8 @@
   </head>
   <body>
     <div class="container">
+      <button class="post">Novo Registro</button>
+
       <table>
         <tr>
           <th>ID</th>
@@ -18,6 +20,20 @@
           <th>AÇÕES</th>
         </tr>
       </table>
+
+      <form>
+        <input name="name" placeholder="digite um nome" />
+        <input name="email" placeholder="digite um email" />
+        <select name="gender">
+          <option value="male" selected>homem</option>
+          <option value="female">mulher</option>
+        </select>
+        <select name="status">
+          <option value="active" selected>ativo</option>
+          <option value="inactive">inativo</option>
+        </select>
+        <button type="submit">enviar</button>
+      </form>
     </div>
 
     <script type="module" src="index.js"></script>

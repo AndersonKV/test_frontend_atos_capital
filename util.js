@@ -9,8 +9,6 @@ export async function findById(id) {
 }
 
 export function checkIsValueUpdateChange(data, tableName, tableEmail) {
-  console.log(data.email === tableEmail, data.name === tableName);
-
   if (data.email === tableEmail && data.name === tableName) {
     return true;
   } else {
@@ -18,7 +16,7 @@ export function checkIsValueUpdateChange(data, tableName, tableEmail) {
   }
 }
 
-export function openingInput(tableRows, context) {
+export function openingInput(tableRows, button) {
   const tableName = tableRows.querySelector('.td-name');
   const tableEmail = tableRows.querySelector('.td-email');
 
@@ -37,7 +35,7 @@ export function openingInput(tableRows, context) {
   tableName.querySelector('input').value = getNameValue;
   tableEmail.querySelector('input').value = getEmailValue;
 
-  context.innerText = 'Atualizar';
+  button.innerText = 'Atualizar';
 }
 
 export function closedInput(tableRows, button) {
@@ -52,4 +50,21 @@ export function closedInput(tableRows, button) {
   button.innerText = 'Editar';
 
   return { name: inputName.value, email: inputEmail.value };
+}
+
+export function formValidate(data) {
+  let regex = new RegExp(
+    /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/
+  );
+  if (data.name.trim().length === 0) {
+    alert('nome não pode estar vazio');
+    return true;
+  }
+
+  if (data.email.length === 0 || regex.test(data.email) === false) {
+    alert('email mal formatado');
+    return true;
+  }
+
+  return false;
 }

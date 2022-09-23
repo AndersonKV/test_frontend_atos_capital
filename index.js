@@ -1,5 +1,5 @@
-import { createElementHTML } from './compomnents.js';
-import { handleEdit, handleDelete } from './handles.js';
+import { createElementHTML, createTableData } from './compomnents.js';
+import { handleEdit, handleDelete, onSubmit, handlePost } from './handles.js';
 import { token } from './util.js';
 
 function getApi() {
@@ -17,29 +17,10 @@ function getApi() {
     });
 }
 
-function createTableData(data) {
-  const tr = createElementHTML('tr');
-  tr.id = data.id;
+document.querySelector('.post').addEventListener('click', function () {
+  document.querySelector('table').classList.add('hide-table');
+});
 
-  const tdId = createElementHTML('td', null, data.id);
-
-  const tdName = createElementHTML('td', 'td-name', data.name);
-
-  const tdEmail = createElementHTML('td', 'td-email', data.email);
-
-  const tdStatus = createElementHTML('td', 'td-status');
-
-  const editButton = createElementHTML('button', null, 'Editar');
-  const deleteButton = createElementHTML('button', null, 'Excluir');
-
-  editButton.addEventListener('click', handleEdit);
-  deleteButton.addEventListener('click', handleDelete);
-
-  tdStatus.append(editButton, deleteButton);
-
-  tr.append(tdId, tdName, tdEmail, tdStatus);
-
-  return tr;
-}
+document.querySelector('form').addEventListener('submit', handlePost);
 
 window.onload = getApi;
