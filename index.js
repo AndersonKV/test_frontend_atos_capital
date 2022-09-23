@@ -9,6 +9,8 @@ function getApi() {
   fetch(url, { method: 'GET' })
     .then(res => res.json())
     .then(data => {
+      localStorage.setItem('data', JSON.stringify(data));
+
       data.map(user => {
         table.appendChild(createTableData(user));
       });
@@ -21,11 +23,11 @@ function createTableData(data) {
 
   const tdId = createElementHTML('td', null, data.id);
 
-  const tdName = createElementHTML('td', 'name', data.name);
+  const tdName = createElementHTML('td', 'td-name', data.name);
 
-  const tdEmail = createElementHTML('td', 'email', data.email);
+  const tdEmail = createElementHTML('td', 'td-email', data.email);
 
-  const tdStatus = createElementHTML('td', 'status');
+  const tdStatus = createElementHTML('td', 'td-status');
 
   const editButton = createElementHTML('button', null, 'Editar');
   const deleteButton = createElementHTML('button', null, 'Excluir');

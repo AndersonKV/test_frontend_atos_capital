@@ -1,65 +1,107 @@
-import { token } from './util.js';
-import { createElementHTML } from './compomnents.js';
+import {
+  token,
+  findById,
+  checkIsValueUpdateChange,
+  openingInput,
+  closedInput,
+} from './util.js';
 
-export function handleEdit(event) {
+export function handlePost(data) {
+  const url = 'https://gorest.co.in/public/v2/users';
+
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer ' + token,
+    },
+    body: data,
+  })
+    .then(res => {
+      console.log(res);
+
+      if (res.status === 201) {
+        alert('post feito com sucesso');
+      }
+
+      return res.json();
+    })
+    .then(data => {
+      console.log(data);
+      // alert(data.message)
+    })
+    .catch(err => {
+      alert(err.message);
+    });
+}
+
+export async function handleEdit(event) {
   const getAllInputAvailable = document
     .querySelector('table')
     .querySelectorAll('input');
 
-  const inputsFromTabletEdit = event.path[2];
+  const tableRows = event.path[2];
 
-  const tableName = inputsFromTabletEdit.querySelector('.name');
-  const tableEmail = inputsFromTabletEdit.querySelector('.email');
+  const id = String(event.path[2].id);
 
-  const getNameValue = tableName.innerText;
-  const getEmailValue = tableEmail.innerText;
+  const checkIdFromTableIsEqual = String(
+    document.querySelector('input')?.parentElement?.parentElement.id
+  );
 
-  const inputOpening = inputsFromTabletEdit.querySelectorAll('input');
+  const onlyTwoInputShouldActived =
+    getAllInputAvailable.length === 2 && id === checkIdFromTableIsEqual;
 
-  const id = event.path[2].id;
+  if (onlyTwoInputShouldActived) {
+    const { name, email } = closedInput(tableRows, this);
 
-  const checkIdFromTableIsEqual =
-    document.querySelector('input')?.parentElement?.parentElement.id;
+    const find = await findById(id);
 
-  if (
-    getAllInputAvailable.length === 2 &&
-    id === String(checkIdFromTableIsEqual)
-  ) {
-    const getUpdateName = inputOpening[0].value;
-    const getUpdateEmail = inputOpening[1].value;
+    if (checkIsValueUpdateChange(find[0], name, email)) {
+      return;
+    }
 
-    tableName.innerText = getUpdateName;
-    tableName.querySelector('input')?.remove();
+    const data = {
+      id,
+      name,
+      email,
+    };
 
-    tableEmail.innerText = getUpdateEmail;
-    tableEmail.querySelector('input')?.remove();
-
-    this.innerText = 'Editar';
-  } else if (getAllInputAvailable.length === 0) {
-    tableName.innerText = '';
-    tableEmail.innerText = '';
-
-    const inputName = createElementHTML('input', 'input-name', null);
-    const inputEmail = createElementHTML('input', 'input-email', null);
-
-    tableName.append(inputName);
-    tableEmail.append(inputEmail);
-
-    tableName.querySelector('input').value = getNameValue;
-    tableEmail.querySelector('input').value = getEmailValue;
-
-    this.innerText = 'Atualizar';
+    handleUpdate(data);
+  } else if (!getAllInputAvailable.length) {
+    openingInput(tableRows, this);
   }
+}
+
+export function handleUpdate(data) {
+  const url = 'https://gorest.co.in/public/v2/users/' + data.id;
+
+  fetch(url, {
+    method: 'PUT',
+    headers: {
+      Authorization: 'Bearer ' + token,
+    },
+    body: data,
+  })
+    .then(res => {
+      console.log(res);
+
+      if (res.status === 200) {
+        alert('atualizado com sucesso');
+      }
+
+      return res.json();
+    })
+    .then(data => {
+      // alert(data.message)
+    })
+    .catch(err => {
+      alert(err.message);
+    });
 }
 
 export function handleDelete() {
   const id = this.parentElement.parentElement.id;
-  const url = 'https://gorest.co.in/public/v2/users/w' + id;
 
-  const myHeaders = new Headers({
-    Authorization: token,
-    'Access-Control-Allow-Origin': '*',
-  });
+  const url = 'https://gorest.co.in/public/v2/users/' + id;
 
   fetch(url, {
     method: 'DELETE',
@@ -69,16 +111,11 @@ export function handleDelete() {
   })
     .then(res => {
       if (res.status === 204) {
-        alert('sucesso');
+        alert('tabela deletada');
         document.getElementById(id).remove();
-        return;
       }
-
-      return res.json();
     })
-    .then(data => alert(data.message))
     .catch(err => {
-      console.log('err');
       alert(err.message);
     });
 }
